@@ -2,36 +2,29 @@ package com.example.movieapp.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.movieapp.data.model.Data
-import com.example.movieapp.data.remote.RetrofitInstance
+import com.example.movieapp.data.model.Movie
+import com.example.movieapp.domain.usecase.GetPopularMoviesUseCase
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class HomeScreenViewModel : ViewModel() {
-    private val _movies = MutableStateFlow<List<Data>>(emptyList())
-    val movies: StateFlow<List<Data>> = _movies
+@HiltViewModel
+class HomeScreenViewModel @Inject constructor(
+    private val getPopularMoviesUseCase: GetPopularMoviesUseCase
+) :
+    ViewModel() {
+    private val _movies = MutableStateFlow<List<Movie>>(emptyList())
+    val movies: StateFlow<List<Movie>> = _movies
 
     fun fetchMovies() {
         viewModelScope.launch {
-            val response = RetrofitInstance.api.getMovies()
-            _movies.value = response.movies
+            // val response = RetrofitInstance.api.getMovies()
+            val response = getPopularMoviesUseCase()
+            _movies.value = response.results
         }
     }
 
-//    fun fetchMovies() {
-//        viewModelScope.launch {
-//            val randomPage = (1..20).random()
-//            val response = RetrofitInstance.api.getMoviesByPage(randomPage)
-//            _movies.value = response.movies
-//        }
-//    }
-
-    fun searchMovies(query: String) {
-        viewModelScope.launch {
-            val response = RetrofitInstance.api.searchMovies(query)
-            _movies.value = response.movies
-        }
-    }
 
 }

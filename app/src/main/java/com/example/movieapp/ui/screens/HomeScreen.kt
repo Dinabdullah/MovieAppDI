@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -26,22 +25,23 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.example.movieapp.Screen
 import com.example.movieapp.ui.componants.BottomBar
 import com.example.movieapp.ui.componants.MovieBox
-import com.example.movieapp.ui.componants.SearchBar
 import com.example.movieapp.viewmodel.HomeScreenViewModel
+import dagger.hilt.android.AndroidEntryPoint
+import dagger.hilt.android.lifecycle.HiltViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier,
     navController: NavHostController,
-    viewModel: HomeScreenViewModel
+    viewModel: HomeScreenViewModel = hiltViewModel()
 ) {
     val movies by viewModel.movies.collectAsState()
-    var searchText by remember { mutableStateOf("") }
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
@@ -56,8 +56,10 @@ fun HomeScreen(
                         navController.navigate(Screen.Home.route)
                     }
                 },
-                searchClicked = { navController.navigate(Screen.Details.route) },
-                watchListClicked = { navController.navigate(Screen.WatchList.route) }
+                searchClicked = {
+                },
+                watchListClicked = {
+                }
             )
         },
         containerColor = Color(0xFF242A32),
@@ -76,17 +78,6 @@ fun HomeScreen(
                 viewModel.fetchMovies()
             }
 
-            SearchBar(
-                search = searchText,
-                onSearch = {
-                    searchText = it
-                    if (it.isNotEmpty()) {
-                        viewModel.searchMovies(it)
-                    } else {
-                        viewModel.fetchMovies()
-                    }
-                }
-            )
             LazyVerticalGrid(
                 columns = GridCells.Fixed(2),
                 modifier = Modifier
@@ -95,11 +86,11 @@ fun HomeScreen(
                 horizontalArrangement = Arrangement.spacedBy(12.dp),
                 verticalArrangement = Arrangement.spacedBy(12.dp),
             ) {
-                items(movies) { movie ->
+                items(movies.size) { index ->
+                    val movie = movies[index]
                     MovieBox(
-                        movie.poster,
+                        "https://image.tmdb.org/t/p/w500${movie.poster_path}",
                         onClick = {
-                            navController.navigate(Screen.Details.passId(movie.id))
                         },
                         title = movie.title
                     )
@@ -110,14 +101,3 @@ fun HomeScreen(
     }
 }
 
-
-@SuppressLint("ViewModelConstructorInComposable")
-@Preview
-@Composable
-private fun HomeScreenPreview() {
-    HomeScreen(
-        navController = NavHostController(LocalContext.current),
-        modifier = Modifier,
-        viewModel = HomeScreenViewModel()
-    )
-}
