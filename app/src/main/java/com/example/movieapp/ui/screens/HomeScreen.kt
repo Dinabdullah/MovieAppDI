@@ -23,10 +23,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import com.example.movieapp.R
 import com.example.movieapp.Screen
 import com.example.movieapp.ui.componants.BottomBar
 import com.example.movieapp.ui.componants.MovieBox
@@ -46,7 +49,7 @@ fun HomeScreen(
         modifier = Modifier.fillMaxSize(),
         topBar = {
             TopAppBar(
-                title = { Text(text = "What do you want to watch?") },
+                title = { Text(text = stringResource(R.string.what_do_you_want_to_watch)) },
             )
         },
         bottomBar = {
@@ -81,10 +84,10 @@ fun HomeScreen(
             LazyVerticalGrid(
                 columns = GridCells.Fixed(2),
                 modifier = Modifier
-                    .padding(6.dp)
+                    .padding(dimensionResource(id = R.dimen.dp_6))
                     .fillMaxSize(),
-                horizontalArrangement = Arrangement.spacedBy(12.dp),
-                verticalArrangement = Arrangement.spacedBy(12.dp),
+                horizontalArrangement = Arrangement.spacedBy( dimensionResource(id = R.dimen.dp_12)),
+                verticalArrangement = Arrangement.spacedBy( dimensionResource(id = R.dimen.dp_12)),
             ) {
                 items(movies.size) { index ->
                     val movie = movies[index]

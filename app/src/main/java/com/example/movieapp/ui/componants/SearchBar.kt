@@ -13,6 +13,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -28,9 +29,9 @@ fun SearchBar(
         value = search,
         onValueChange = { onSearch(it) },
         modifier = modifier
-            .padding(horizontal = 24.dp, vertical = 12.dp)
-            .width(327.dp)
-            .height(50.dp),
+            .padding(horizontal =  dimensionResource(id = R.dimen.dp_24), vertical =  dimensionResource(id = R.dimen.dp_12))
+            .width( dimensionResource(id = R.dimen.dp_327))
+            .height( dimensionResource(id = R.dimen.dp_50)),
         placeholder = { Text(text = "Search", color = Color.Gray) },
         trailingIcon = {
             Icon(
@@ -39,7 +40,7 @@ fun SearchBar(
                 tint = Color.Gray
             )
         },
-        shape = RoundedCornerShape(16.dp),
+        shape = RoundedCornerShape( dimensionResource(id = R.dimen.dp_16)),
         colors = TextFieldDefaults.colors(
             focusedIndicatorColor = Color.Transparent,
             unfocusedIndicatorColor = Color.Transparent,
