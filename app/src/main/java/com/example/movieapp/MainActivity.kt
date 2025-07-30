@@ -25,7 +25,7 @@ class MainActivity : ComponentActivity() {
             MovieAppTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { _ ->
                     val viewModel: HomeScreenViewModel = hiltViewModel()
-                    val state by hiltViewModel<HomeScreenViewModel>().uiState.collectAsState()
+                    val state by viewModel.uiState.collectAsState()
                     HomeScreen(
                         onEvent = viewModel::onEvent,
                         state = state

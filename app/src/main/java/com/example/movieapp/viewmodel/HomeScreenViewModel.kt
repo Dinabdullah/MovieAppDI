@@ -47,7 +47,7 @@ class HomeScreenViewModel @Inject constructor(
         _uiState.value = UIState(isLoading = false, errorMessage = message)
     }
 
-    fun fetchMovies() {
+    private fun fetchMovies() {
         viewModelScope.launch {
             onEvent(Events.ShowLoading)
 
