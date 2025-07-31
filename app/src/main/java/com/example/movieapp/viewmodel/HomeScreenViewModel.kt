@@ -2,18 +2,16 @@ package com.example.movieapp.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.movieapp.domain.usecase.GetPopularMoviesUseCase
 import com.example.movieapp.domain.usecase.GetPopularMoviesUseCaseImpl
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import java.io.IOException
-import javax.inject.Inject
 
-@HiltViewModel
-class HomeScreenViewModel @Inject constructor(
-    private val getPopularMoviesUseCase: GetPopularMoviesUseCaseImpl
+class HomeScreenViewModel(
+    private val getPopularMoviesUseCase: GetPopularMoviesUseCase
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(UIState())
     val uiState: StateFlow<UIState> = _uiState

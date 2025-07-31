@@ -70,4 +70,12 @@ dependencies {
     implementation(libs.hilt)
     ksp(libs.hilt.compiler)
     implementation(libs.hilt.navigation.compose)
+
+    // Koin Core
+    implementation("io.insert-koin:koin-core:3.5.3")
+
+// Koin Android
+    implementation("io.insert-koin:koin-android:3.5.3")
+    implementation("io.insert-koin:koin-androidx-compose:3.5.3")
+
 }

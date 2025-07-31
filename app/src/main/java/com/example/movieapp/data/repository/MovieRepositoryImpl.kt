@@ -4,9 +4,8 @@ import com.example.movieapp.data.model.Movie
 import com.example.movieapp.data.remote.MovieApi
 import com.example.movieapp.domain.repository.MovieRepository
 import java.io.IOException
-import javax.inject.Inject
 
-class MovieRepositoryImpl @Inject constructor(
+class MovieRepositoryImpl(
     private val api: MovieApi
 ) : MovieRepository {
     override suspend fun getPopularMovies(): Result<List<Movie>> {

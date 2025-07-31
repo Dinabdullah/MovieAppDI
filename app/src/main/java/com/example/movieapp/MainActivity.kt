@@ -9,14 +9,12 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.movieapp.ui.screens.HomeScreen
 import com.example.movieapp.ui.theme.MovieAppTheme
 import com.example.movieapp.viewmodel.HomeScreenViewModel
-import dagger.hilt.android.AndroidEntryPoint
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
-@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,7 +22,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             MovieAppTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { _ ->
-                    val viewModel: HomeScreenViewModel = hiltViewModel()
+                    val viewModel: HomeScreenViewModel by viewModel()
                     val state by viewModel.uiState.collectAsState()
                     HomeScreen(
                         onEvent = viewModel::onEvent,
