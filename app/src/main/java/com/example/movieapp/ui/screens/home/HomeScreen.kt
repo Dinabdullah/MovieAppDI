@@ -1,12 +1,19 @@
-package com.example.movieapp.ui.screens
+package com.example.movieapp.ui.screens.home
 
+import androidx.compose.animation.AnimatedVisibilityScope
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.GridCells.Fixed
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
@@ -20,17 +27,18 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import com.example.movieapp.R
-import com.example.movieapp.ui.componants.BottomBar
-import com.example.movieapp.ui.componants.MovieBox
-import com.example.movieapp.viewmodel.Events
-import com.example.movieapp.viewmodel.UIState
+import com.example.movieapp.ui.components.BottomBar
+import com.example.movieapp.ui.components.MovieBox
+import com.example.movieapp.ui.components.NoInternet
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalSharedTransitionApi::class)
 @Composable
-fun HomeScreen(
+fun SharedTransitionScope.HomeScreen(
     modifier: Modifier = Modifier,
     state: UIState,
     onEvent: (Events) -> Unit,
+    onNavigateToDetails: (Int) -> Unit,
+    animatedVisibilityScope: AnimatedVisibilityScope
 ) {
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -45,28 +53,22 @@ fun HomeScreen(
         },
         bottomBar = {
             BottomBar(
-                homeClicked = {
-//                    if (navController.currentDestination?.route != Screen.Home.route) {
-//                        navController.navigate(Screen.Home.route)
-//                    }
-                },
-                searchClicked = {
-                },
-                watchListClicked = {
-                }
+                homeClicked = {},
+                searchClicked = {},
+                watchListClicked = {}
             )
         },
         containerColor = Color.Black,
     ) { innerPadding ->
-        when {
-            state.isLoading -> {
+        when (state) {
+            UIState.IsLoading -> {
                 Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                     CircularProgressIndicator()
                 }
             }
 
-            state.isOffline -> {
-                NoInternetScreen(
+            UIState.IsOffline -> {
+                NoInternet(
                     modifier = Modifier.padding(innerPadding),
                     onRetry = {
                         onEvent.invoke(Events.FetchMovies)
@@ -74,26 +76,48 @@ fun HomeScreen(
                 )
             }
 
-            else -> {
+            is UIState.MoviesFetched -> {
                 LazyVerticalGrid(
-                    columns = GridCells.Fixed(2),
-                    modifier = Modifier
+                    columns = Fixed(2),
+                    modifier = modifier
                         .padding(innerPadding)
                         .fillMaxSize(),
                     horizontalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.dp_12)),
                     verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.dp_12)),
                 ) {
-                    items(state.movies) { movie ->
+                    items(state.list) { movie ->
                         MovieBox(
                             movie = movie,
                             onClick = {
-                            },
+                                movie.id?.let { id ->
+                                    onNavigateToDetails(id)
+                                }
 
-                            )
+                            },
+                            animatedVisibilityScope = animatedVisibilityScope
+                        )
                     }
                 }
             }
+
+            is UIState.OnError -> {
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(innerPadding),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Text(text = stringResource(state.msg), color = Color.Red)
+                    Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.dp_12)))
+                    Button(onClick = { onEvent(Events.FetchMovies) }) {
+                        Text(stringResource(id = R.string.retry))
+                    }
+                }
+            }
+
         }
     }
 }
+
 

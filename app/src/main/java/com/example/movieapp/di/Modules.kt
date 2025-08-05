@@ -2,11 +2,18 @@ package com.example.movieapp.di
 
 import com.example.movieapp.common.Constants
 import com.example.movieapp.data.remote.MovieApi
-import com.example.movieapp.data.repository.MovieRepositoryImpl
-import com.example.movieapp.domain.repository.MovieRepository
-import com.example.movieapp.domain.usecase.GetPopularMoviesUseCase
-import com.example.movieapp.domain.usecase.GetPopularMoviesUseCaseImpl
-import com.example.movieapp.viewmodel.HomeScreenViewModel
+import com.example.movieapp.data.remote.MovieService
+import com.example.movieapp.data.remote.MovieServiceImpl
+import com.example.movieapp.data.repository.moviedetails.MovieDetailsImpl
+import com.example.movieapp.data.repository.popularmovies.PopularMoviesImpl
+import com.example.movieapp.domain.repository.moviedetails.MovieDetails
+import com.example.movieapp.domain.repository.popularmovies.PopularMovies
+import com.example.movieapp.domain.usecase.moviedetails.GetMovieDetailsUseCase
+import com.example.movieapp.domain.usecase.moviedetails.GetMovieDetailsUseCaseImpl
+import com.example.movieapp.domain.usecase.popularmovies.GetPopularMoviesUseCase
+import com.example.movieapp.domain.usecase.popularmovies.GetPopularMoviesUseCaseImpl
+import com.example.movieapp.ui.screens.details.DetailsViewModel
+import com.example.movieapp.ui.screens.home.HomeScreenViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 import retrofit2.Retrofit
@@ -25,7 +32,7 @@ val networkModule = module {
         val apiKeyInterceptor = okhttp3.Interceptor { chain ->
             val originalRequest = chain.request()
             val newUrl = originalRequest.url.newBuilder()
-                .addQueryParameter("api_key", Constants.API_KEY)
+                .addQueryParameter(Constants.API_KEY, Constants.API_KEY_VALUE)
                 .build()
 
             val newRequest = originalRequest.newBuilder()
@@ -42,21 +49,27 @@ val networkModule = module {
 }
 
 val repositoryModule = module {
-    single<MovieRepository> { MovieRepositoryImpl(get()) }
+    single<MovieService> { MovieServiceImpl(get()) }
+
+    single<PopularMovies> { PopularMoviesImpl(get()) }
+    single<MovieDetails> { MovieDetailsImpl(get()) }
 }
 
 val useCaseModule = module {
     single<GetPopularMoviesUseCase> { GetPopularMoviesUseCaseImpl(get()) }
+    single<GetMovieDetailsUseCase> { GetMovieDetailsUseCaseImpl(get()) }
+
 }
 
 val viewModelModule = module {
     viewModel<HomeScreenViewModel> { HomeScreenViewModel(get()) }
+    viewModel<DetailsViewModel> { DetailsViewModel(get()) }
 }
 
 val appModule = listOf(
     networkModule,
     repositoryModule,
     useCaseModule,
-    viewModelModule
+    viewModelModule,
 )
 

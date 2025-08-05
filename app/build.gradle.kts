@@ -3,7 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.ksp)
-    alias(libs.plugins.hilt)
+    kotlin("plugin.serialization") version "2.2.0"
 }
 
 android {
@@ -61,15 +61,13 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
-    implementation("androidx.navigation:navigation-compose:2.7.7")
+    implementation("androidx.navigation:navigation-compose:2.8.0")
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
-    implementation ("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2")
     implementation("io.coil-kt:coil-compose:2.4.0")
 
-    implementation(libs.hilt)
-    ksp(libs.hilt.compiler)
-    implementation(libs.hilt.navigation.compose)
+
 
     // Koin Core
     implementation("io.insert-koin:koin-core:3.5.3")
@@ -77,5 +75,10 @@ dependencies {
 // Koin Android
     implementation("io.insert-koin:koin-android:3.5.3")
     implementation("io.insert-koin:koin-androidx-compose:3.5.3")
+
+
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3")
+
+    implementation("com.google.accompanist:accompanist-navigation-animation:0.36.0")
 
 }

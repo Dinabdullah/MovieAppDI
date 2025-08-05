@@ -1,4 +1,4 @@
-package com.example.movieapp.ui.screens
+package com.example.movieapp.ui.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -20,7 +20,7 @@ import androidx.compose.ui.unit.sp
 import com.example.movieapp.R
 
 @Composable
-fun NoInternetScreen(
+fun NoInternet(
     modifier: Modifier = Modifier,
     onRetry: () -> Unit = {}
 ) {
@@ -55,5 +55,5 @@ fun NoInternetScreen(
 @Preview
 @Composable
 private fun InternetErrorPrev() {
-    NoInternetScreen()
+    NoInternet()
 }
