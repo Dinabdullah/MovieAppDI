@@ -7,6 +7,8 @@ object Constants {
     const val API_KEY = "api_key"
     const val MOVIE_ID = "movie_id"
 
+    const val BASE_POSTER_PATH="https://image.tmdb.org/t/p/w500"
+
     object Endpoints {
         const val POPULAR_MOVIES = "movie/popular"
         const val MOVIE_DETAILS = "movie/{movie_id}"

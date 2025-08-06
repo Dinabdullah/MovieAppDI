@@ -1,7 +1,7 @@
-package com.example.movieapp.domain.repository.popularmovies
+package com.example.movieapp.domain.repository.popularmoviesrepo
 
 import com.example.movieapp.domain.model.Movie
 
-interface PopularMovies {
+interface IPopularMoviesRepo {
     suspend fun getPopularMovies(): Result<List<Movie>>
 }

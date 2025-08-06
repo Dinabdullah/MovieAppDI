@@ -36,7 +36,7 @@ class DetailsViewModel(
                         is IOException -> MovieDetailsState.IsOffline
                         else -> {
                             val resId =
-                                error.message?.toIntOrNull() ?: R.string.something_went_wrong
+                                R.string.something_went_wrong
                             MovieDetailsState.OnError(resId)
                         }
                     }

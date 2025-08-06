@@ -2,9 +2,9 @@ package com.example.movieapp.data.remote
 
 import com.example.movieapp.data.model.MovieDto
 
-class MovieServiceImpl(
+class MovieRemoteDataSourceImpl(
     private val api: MovieApi
-) : MovieService {
+) : MovieRemoteDataSource {
     override suspend fun getPopularMovies(): List<MovieDto> {
         return api.getMovies().results?.filterNotNull() ?: emptyList()
     }
