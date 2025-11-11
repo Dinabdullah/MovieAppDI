@@ -81,4 +81,9 @@ dependencies {
 
     implementation("com.google.accompanist:accompanist-navigation-animation:0.36.0")
 
+    testImplementation("io.mockk:mockk:1.13.12")
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
+
+
+
 }
